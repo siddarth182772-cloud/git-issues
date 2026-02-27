@@ -92,31 +92,3 @@ def update_user(user_id):
     finally:
         cursor.close()
         conn.close()
-
-# 5️⃣ Delete user by ID
-@app.route('/users/delete/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-    if not cursor.fetchone():
-        return jsonify({'error': 'User not found'}), 404
-
-    try:
-        cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
-        conn.commit()
-        return jsonify({'message': 'User deleted successfully'})
-    except mysql.connector.Error as err:
-        return jsonify({'error': str(err)}), 500
-    finally:
-        cursor.close()
-        conn.close()
-
-# 🔹 Simple Hello route
-@app.route('/')
-def index():
-    return "Hello"
-
-# Entry Point
-if __name__ == '__main__':
-
